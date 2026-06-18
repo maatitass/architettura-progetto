@@ -1,7 +1,7 @@
 import json
 
 def process_notebook():
-    with open('/Users/matiasbonoli/Downloads/architettura/ProgettoMLbonni_2.ipynb', 'r') as f:
+    with open('/Users/matiasbonoli/Downloads/architettura/ProgettoArchibonni.ipynb', 'r') as f:
         nb = json.load(f)
     
     with open('/Users/matiasbonoli/Downloads/architettura/notebook_content.md', 'w') as f:
