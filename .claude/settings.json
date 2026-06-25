@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python \"C:\\\\Users\\\\danym\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-danym-Desktop-architettura-progetto\\\\05d28286-97ea-49b8-8ad5-37cb7848f42f\\\\scratchpad\\\\gen_nb.py\")",
+      "Bash(python -)"
+    ]
+  }
+}
