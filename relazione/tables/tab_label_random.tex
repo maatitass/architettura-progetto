@@ -1,0 +1,15 @@
+\begin{table}[H]\centering\footnotesize
+\caption{Label noise random: metriche al variare del livello di rumore (test set).}\label{tab:lnr}
+\begin{tabular}{c *{9}{c}}
+\toprule
+ & \multicolumn{3}{c}{NN Base} & \multicolumn{3}{c}{NN Pro} & \multicolumn{3}{c}{Random Forest}\\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+Rumore & Acc & F1$_m$ & AUC & Acc & F1$_m$ & AUC & Acc & F1$_m$ & AUC \\
+\midrule
+Pulito & 0.8678 & 0.85 & 0.9214 & 0.8601 & 0.85 & 0.9238 & 0.8785 & 0.86 & 0.9300 \\
+10\% & 0.8623 & 0.84 & 0.9128 & 0.8570 & 0.84 & 0.9200 & 0.8767 & 0.86 & 0.9214 \\
+25\% & 0.8410 & 0.82 & 0.8882 & 0.8378 & 0.83 & 0.9081 & 0.8399 & 0.82 & 0.8884 \\
+40\% & 0.7419 & 0.69 & 0.7513 & 0.8044 & 0.79 & 0.8677 & 0.7179 & 0.70 & 0.7673 \\
+\bottomrule
+\end{tabular}
+\end{table}
