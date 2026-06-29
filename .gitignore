@@ -66,3 +66,4 @@ Untitled*.ipynb
 
 # ---- Claude Code ----
 .claude/settings.local.json
+.claude/
