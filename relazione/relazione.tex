@@ -103,8 +103,7 @@ La relazione segue il flusso del lavoro. Descriviamo prima il dataset, la suddiv
 l'analisi esplorativa, condotta solo sul training set. Spieghiamo poi il preprocessing, i tre modelli
 e il loro comportamento sui dati puliti. Definiamo quindi i sette meccanismi di rumore e ne analizziamo
 gli effetti uno alla volta. Chiudiamo con una sintesi trasversale, l'esperimento non supervisionato e
-le conclusioni. Tutti i numeri e le figure vengono dall'esecuzione del notebook. Non abbiamo
-riaddestrato i modelli né ricalcolato le metriche, così il testo resta coerente con il codice. Per la
+le conclusioni. Per la
 riproducibilità abbiamo fissato un seme casuale comune (\texttt{seed = 42}) su tutte le componenti
 stocastiche, cioè suddivisione dei dati, inizializzazione delle reti, iniezione del rumore, Random
 Forest e K-Means.
@@ -358,29 +357,6 @@ di gran lunga la più importante, con un valore vicino a $0{,}24$, più del dopp
 % ============================================================
 \section{Metodologia di iniezione del rumore}\label{sec:rumore}
 
-Definiamo sette tipi
-di rumore, ciascuno pensato per riprodurre un guasto realistico di una pipeline dati. La
-Tabella~\ref{tab:rumori} li riassume.
-
-\begin{table}[H]\centering\small
-\caption{I sette tipi di rumore studiati e il guasto reale che simulano.}\label{tab:rumori}
-\begin{tabular}{ll}
-\toprule
-\textbf{Tipo di rumore} & \textbf{Cosa simula} \\
-\midrule
-Feature noise            & misurazioni imprecise (rumore gaussiano sulle feature) \\
-Feature noise localizzato & misurazioni imprecise sui canali più informativi \\
-Label noise random       & errori di etichettatura casuali e uniformi \\
-Label noise borderline   & errori di etichettatura sui campioni ambigui \\
-Missing values           & celle mancanti (NaN) da imputare \\
-Outlier                  & valori estremi anomali da trattare \\
-Missing feature          & uno o più sensori guasti (feature non disponibili) \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Protocollo comune e livelli di intensità}
-
 In tutti gli esperimenti il rumore colpisce solo il training set, mentre validation e test restano
 puliti. Vogliamo misurare quanto un modello addestrato su dati corrotti riesca comunque a generalizzare
 su dati corretti. Per ogni tipo di rumore riaddestriamo tutti e tre i modelli sul riferimento pulito e
@@ -388,21 +364,19 @@ sui tre livelli, calcolando ogni volta le metriche sullo stesso test set pulito.
 
 Ogni rumore agisce a tre livelli, $10\%$, $25\%$ e $40\%$. Cosa
 significhi il livello dipende dal disturbo, come spieghiamo di seguito meccanismo per meccanismo.
+Definiamo quindi 7 livelli di rumore:
 
-\subsection{I sette meccanismi}
+\subsection{I sette tipi di rumore}
 
 \paragraph{Feature noise (rumore gaussiano).} Aggiungiamo a ogni feature del training un rumore
 gaussiano a media nulla e deviazione standard pari al livello. I dati sono standardizzati
 (Sezione~\ref{sec:prep}), quindi un livello di $0{,}40$ corrisponde a un rumore ampio il $40\%$ della
-deviazione standard della feature, uguale per tutte. Simula sensori imprecisi che restituiscono misure
-leggermente sbagliate.
+deviazione standard della feature, uguale per tutte.
 
 \paragraph{Feature noise localizzato.} Qui teniamo l'intensità del rumore gaussiano fissa a
 $\sigma = 0{,}35$ e facciamo crescere il numero di feature colpite, seguendo la gerarchia di importanza
 del Random Forest (Figura~\ref{fig:featimp}). Al $10\%$ il rumore agisce sulla sola \texttt{fAlpha}, al
-$25\%$ sulle prime tre, al $40\%$ sulle prime cinque. A differenza del feature noise, che aumenta
-l'intensità su tutte le feature, qui colpiamo solo le più informative. Simula sensori imprecisi sui
-canali che pesano di più.
+$25\%$ sulle prime tre, al $40\%$ sulle prime cinque.
 
 \paragraph{Label noise random.} Invertiamo l'etichetta, da $0$ a $1$ e viceversa, di una frazione di
 campioni del training pari al livello, scelti a caso in modo uniforme. Simula errori di annotazione
@@ -411,18 +385,11 @@ senza schema.
 \paragraph{Label noise borderline.} Invertiamo una frazione di etichette pari al livello, ma la
 selezione non è casuale. Calcoliamo i centroidi delle due classi nello spazio standardizzato e, per
 ogni campione, la distanza dal centroide della classe opposta. Invertiamo le etichette dei campioni con
-distanza minore, cioè quelli più vicini all'altra classe e quindi più ambigui. È un disturbo più
-insidioso del rumore casuale, perché corrompe gli esempi vicini al confine decisionale, dove la
-separazione è più delicata. Ci aspettiamo quindi che, a parità di percentuale, danneggi più del rumore
-casuale.
+distanza minore, cioè quelli più vicini all'altra classe e quindi più ambigui.
 
 \paragraph{Missing values.} Sostituiamo ogni cella con un valore mancante (NaN) con probabilità pari al
 livello, in modo indipendente. Né le reti né il Random Forest accettano NaN, quindi serve
-un'imputazione; confrontiamo due strategie, la media e la mediana della feature. Coerentemente con il
-protocollo comune, il disturbo e l'imputazione agiscono solo sul training, mentre validation e test
-restano puliti. Come variante canonica per i confronti aggregati scegliamo la mediana, perché le
-distribuzioni sono asimmetriche (Figura~\ref{fig:hist}) e la mediana è un riassunto più stabile della
-media.
+un'imputazione; confrontiamo due strategie, la media e la mediana della feature.
 
 \paragraph{Outlier.} Scegliamo una frazione di campioni del training pari al livello e ne sostituiamo
 tutti i valori con quantità estreme, pari a $\pm 5$ deviazioni standard con segno casuale per ogni
