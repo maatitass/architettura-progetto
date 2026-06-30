@@ -1,0 +1,23 @@
+\begin{table}[H]\centering\footnotesize
+\caption{Controllo multi-seed sul feature noise: media $\pm$ deviazione standard delle metriche sui cinque semi $\{42, 7, 123, 2024, 99\}$. Le deviazioni standard restano dell'ordine del millesimo, ampiamente inferiori al divario tra livelli di rumore.}\label{tab:multiseed}
+\begin{tabular}{ll ccc}
+\toprule
+Modello & Rumore & Accuracy & F1$_m$ & AUC \\
+\midrule
+NN Base & Pulito & $0.8685 \pm 0.0027$ & $0.8514 \pm 0.0029$ & $0.9220 \pm 0.0015$ \\
+        & 10\%   & $0.8672 \pm 0.0018$ & $0.8487 \pm 0.0025$ & $0.9198 \pm 0.0014$ \\
+        & 25\%   & $0.8526 \pm 0.0020$ & $0.8270 \pm 0.0024$ & $0.9068 \pm 0.0016$ \\
+        & 40\%   & $0.8342 \pm 0.0031$ & $0.7997 \pm 0.0040$ & $0.8924 \pm 0.0027$ \\
+\midrule
+NN Pro  & Pulito & $0.8638 \pm 0.0035$ & $0.8497 \pm 0.0032$ & $0.9241 \pm 0.0010$ \\
+        & 10\%   & $0.8631 \pm 0.0036$ & $0.8479 \pm 0.0030$ & $0.9204 \pm 0.0012$ \\
+        & 25\%   & $0.8464 \pm 0.0045$ & $0.8293 \pm 0.0036$ & $0.9056 \pm 0.0016$ \\
+        & 40\%   & $0.8328 \pm 0.0068$ & $0.8130 \pm 0.0070$ & $0.8924 \pm 0.0012$ \\
+\midrule
+Random Forest & Pulito & $0.8800 \pm 0.0013$ & $0.8645 \pm 0.0014$ & $0.9308 \pm 0.0009$ \\
+        & 10\%   & $0.8646 \pm 0.0024$ & $0.8442 \pm 0.0026$ & $0.9198 \pm 0.0015$ \\
+        & 25\%   & $0.8492 \pm 0.0016$ & $0.8228 \pm 0.0016$ & $0.9042 \pm 0.0018$ \\
+        & 40\%   & $0.8285 \pm 0.0037$ & $0.7934 \pm 0.0055$ & $0.8881 \pm 0.0028$ \\
+\bottomrule
+\end{tabular}
+\end{table}

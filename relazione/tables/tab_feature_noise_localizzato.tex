@@ -1,15 +1,16 @@
 \begin{table}[H]\centering\footnotesize
-\caption{Feature noise localizzato ($\sigma = 0{,}35$) sulle sole feature più importanti: il livello indica quante feature sono colpite (10\%$\to$top-1, 25\%$\to$top-3, 40\%$\to$top-5).}\label{tab:fnloc}
-\begin{tabular}{c *{9}{c}}
+\setlength{\tabcolsep}{4pt}
+\caption{Feature noise localizzato ($\sigma = 0{,}35$) sulle sole feature più importanti: il livello indica quante feature sono colpite (10\%$\to$top-1, 25\%$\to$top-3, 40\%$\to$top-5). R$_m$ = recall macro.}\label{tab:fnloc}
+\begin{tabular}{c *{12}{c}}
 \toprule
- & \multicolumn{3}{c}{NN Base} & \multicolumn{3}{c}{NN Pro} & \multicolumn{3}{c}{Random Forest}\\
-\cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
-Rumore & Acc & F1$_m$ & AUC & Acc & F1$_m$ & AUC & Acc & F1$_m$ & AUC \\
+ & \multicolumn{4}{c}{NN Base} & \multicolumn{4}{c}{NN Pro} & \multicolumn{4}{c}{Random Forest}\\
+\cmidrule(lr){2-5}\cmidrule(lr){6-9}\cmidrule(lr){10-13}
+Rumore & Acc & R$_m$ & F1$_m$ & AUC & Acc & R$_m$ & F1$_m$ & AUC & Acc & R$_m$ & F1$_m$ & AUC \\
 \midrule
-Pulito & 0.8678 & 0.85 & 0.9214 & 0.8601 & 0.85 & 0.9238 & 0.8785 & 0.86 & 0.9300 \\
-10\% & 0.8651 & 0.85 & 0.9211 & 0.8651 & 0.85 & 0.9243 & 0.8743 & 0.86 & 0.9274 \\
-25\% & 0.8523 & 0.83 & 0.9043 & 0.8478 & 0.83 & 0.9058 & 0.8533 & 0.83 & 0.9056 \\
-40\% & 0.8452 & 0.82 & 0.8991 & 0.8386 & 0.82 & 0.8973 & 0.8389 & 0.81 & 0.8931 \\
+Pulito & 0.8678 & 0.84 & 0.85 & 0.9214 & 0.8601 & 0.85 & 0.85 & 0.9238 & 0.8785 & 0.85 & 0.86 & 0.9300 \\
+10\% & 0.8651 & 0.84 & 0.85 & 0.9211 & 0.8651 & 0.85 & 0.85 & 0.9243 & 0.8743 & 0.85 & 0.86 & 0.9274 \\
+25\% & 0.8523 & 0.82 & 0.83 & 0.9043 & 0.8478 & 0.83 & 0.83 & 0.9058 & 0.8533 & 0.82 & 0.83 & 0.9056 \\
+40\% & 0.8452 & 0.81 & 0.82 & 0.8991 & 0.8386 & 0.82 & 0.82 & 0.8973 & 0.8389 & 0.79 & 0.81 & 0.8931 \\
 \bottomrule
 \end{tabular}
 \end{table}
