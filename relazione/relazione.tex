@@ -84,28 +84,32 @@ Ashley Chudory \quad--\quad matricola [matricola]\\
 % ============================================================
 \section{Introduzione}\label{sec:intro}
 
-Nelle pipeline applicative reali, la presenza di imperfezioni nei dati — come
-misurazioni imprecise, errori di annotazione, valori mancanti e anomalie —
+In applicazioni reali la presenza di imperfezioni nei dati come
+misurazioni imprecise, errori di annotazione, valori mancanti e anomalie,
 rappresenta la norma. L'obiettivo di questa analisi non è identificare il 
 modello in grado di raggiungere l'accuratezza massima sui dati ideali, bensì 
-quantificare la resilienza di ciascun algoritmo al progressivo degrado delle 
+quantificare la resistenza di ciascun modello al progressivo degrado delle 
 informazioni. A tale scopo, viene misurata la robustezza di tre modelli 
 supervisionati corrompendo il training set in modo controllato, attraverso 
 sette diverse tipologie di rumore.
 
-Il fine ultimo non è decretare un singolo modello vincitore, ma comprendere le 
-dinamiche e le cause del degrado prestazionale in funzione del tipo di 
-disturbo. Il protocollo sperimentale prevede la definizione di una baseline sui 
-dati integri; successivamente, i modelli vengono riaddestrati su versioni del 
-training set alterate a tre livelli di intensità crescente: 10\%, 25\% e 40\%. 
-Le metriche di valutazione vengono sempre calcolate su un test set mantenuto 
-pulito e inalterato. I tre modelli analizzati sono una rete neurale standard 
-(\textit{NN Base}), una variante dotata di meccanismi di regolarizzazione 
-(\textit{NN Pro}) e un \textit{Random Forest}. I sette disturbi introdotti 
-agiscono su feature, etichette, valori mancanti, outlier e disponibilità 
-stessa delle variabili. Viene inoltre integrato un esperimento non 
-supervisionato (K-Means) per osservare l'impatto del rumore quando il modello 
-non ha accesso alle etichette.
+L'obiettivo dello studio non è decretare un singolo modello vincente, ma
+comprendere come e perché le prestazioni peggiorino in base al tipo di
+disturbo introdotto nei dati. La procedura prevede inizialmente il
+calcolo di una baseline sui dati integri. Successivamente,
+i modelli vengono riaddestrati su versioni del training set
+alterate con tre livelli di intensità crescente: 10\%, 25\% e 40\%.
+Per garantire la correttezza della valutazione, le metriche vengono
+sempre calcolate su un test set mantenuto pulito e inalterato.
+
+I tre modelli analizzati sono una rete neurale classica,
+una sua variante dotata di meccanismi di regolarizzazione
+e un Random Forest. I sette disturbi introdotti agiscono
+direttamente su feature, etichette, valori mancanti,
+outlier e sulla disponibilità stessa delle variabili. Infine,
+viene affiancato un esperimento non supervisionato tramite K-Means,
+svolto per osservare l'impatto del rumore quando il modello lavora
+senza avere accesso alle etichette.
 
 Per garantire la completa riproducibilità degli esperimenti, è stato fissato un 
 seme casuale globale (\texttt{seed = 42}) su tutte le componenti stocastiche, 
@@ -123,19 +127,14 @@ Monte Carlo del telescopio Cherenkov MAGIC. Ogni osservazione descrive la
 traccia luminosa, di forma approssimativamente ellittica, lasciata da un 
 evento atmosferico sul piano del rivelatore. Il task consiste in una 
 classificazione binaria con un preciso significato fisico: distinguere i 
-segnali utili, prodotti da raggi gamma, dal rumore di fondo generato da adroni 
-(raggi cosmici). Un adrone classificato erroneamente come gamma (falso positivo) 
-contamina il segnale, mentre un gamma scartato (falso negativo) riduce la 
-statistica utile per le analisi fisiche. Questa forte asimmetria nei costi 
-degli errori rende la semplice accuratezza una metrica insufficiente per 
-valutare adeguatamente un modello.
+segnali utili, prodotti da raggi gamma, dal rumore di fondo generato da adroni. 
 
 Il dataset originario comprende $19\,020$ osservazioni e $11$ attributi: dieci 
 feature continue e una variabile target. Le feature codificano la geometria e 
-la distribuzione di intensità dell'immagine dell'evento sul rivelatore. In fase 
+la distribuzione di intensità dell'immagine. In fase 
 di preparazione, è stata effettuata una mappatura numerica delle due classi: 
-\texttt{h}~$\rightarrow 0$ per gli adroni (fondo) e \texttt{g}~$\rightarrow 1$ 
-per i gamma (segnale). La Tabella~\ref{tab:feature} riporta la descrizione 
+\texttt{h}~$\rightarrow 0$ per gli adroni e \texttt{g}~$\rightarrow 1$ 
+per i gamma. La Tabella~\ref{tab:feature} riporta la descrizione 
 dettagliata delle feature.
 
 \begin{table}[H]\centering\small
