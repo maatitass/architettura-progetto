@@ -1,0 +1,15 @@
+\begin{table}[H]\centering\small
+\setlength{\tabcolsep}{4pt}
+\caption{Outlier: accuratezza con le tre strategie di trattamento (L = lasciati, W = winsorizzazione, I = imputazione). Le differenze sono minime a ogni livello.}\label{tab:outstrategie}
+\begin{tabular}{c ccc ccc ccc}
+\toprule
+ & \multicolumn{3}{c}{NN Base} & \multicolumn{3}{c}{NN Pro} & \multicolumn{3}{c}{Random Forest}\\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+\textbf{Rumore} & L & W & I & L & W & I & L & W & I \\
+\midrule
+10\% & 0.8638 & 0.8657 & 0.8670 & 0.8533 & 0.8583 & 0.8591 & 0.8796 & 0.8788 & 0.8783 \\
+25\% & 0.8609 & 0.8628 & 0.8665 & 0.8591 & 0.8441 & 0.8604 & 0.8783 & 0.8751 & 0.8738 \\
+40\% & 0.8573 & 0.8615 & 0.8633 & 0.8509 & 0.8541 & 0.8630 & 0.8725 & 0.8736 & 0.8738 \\
+\bottomrule
+\end{tabular}
+\end{table}

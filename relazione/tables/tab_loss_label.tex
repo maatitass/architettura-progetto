@@ -1,0 +1,15 @@
+\begin{table}[H]\centering\small
+\caption{Log loss sul test set per le due reti sotto label noise. La loss della rete Base cresce molto più in fretta di quella della rete Pro: oltre a sbagliare di più, la Base assegna probabilità alte alle previsioni sbagliate.}\label{tab:losslabel}
+\begin{tabular}{c cc cc}
+\toprule
+ & \multicolumn{2}{c}{Label noise random} & \multicolumn{2}{c}{Label noise borderline}\\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+\textbf{Rumore} & NN Base & NN Pro & NN Base & NN Pro \\
+\midrule
+Pulito & 0.3236 & 0.3321 & 0.3236 & 0.3321 \\
+10\%   & 0.3551 & 0.3908 & 0.4809 & 0.3913 \\
+25\%   & 0.4752 & 0.4969 & 0.7025 & 0.4931 \\
+40\%   & 0.5968 & 0.6137 & 1.0570 & 0.6111 \\
+\bottomrule
+\end{tabular}
+\end{table}

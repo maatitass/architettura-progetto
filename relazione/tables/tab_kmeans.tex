@@ -1,0 +1,15 @@
+\begin{table}[H]\centering\small
+\caption{Qualità del clustering K-Means (k=2) al crescere del feature noise. La silhouette cala, mentre ARI e AMI restano vicini a zero e la purezza resta fissa alla quota della classe maggioritaria (0.648): i cluster non catturano le classi a nessun livello di rumore.}\label{tab:kmeans}
+\begin{tabular}{c cccc}
+\toprule
+$\sigma$ & ARI & AMI & Silhouette & Purezza \\
+\midrule
+0.00 & 0.006 & 0.001 & 0.290 & 0.648 \\
+0.25 & 0.008 & 0.002 & 0.272 & 0.648 \\
+0.50 & 0.009 & 0.002 & 0.234 & 0.648 \\
+1.00 & 0.006 & 0.002 & 0.164 & 0.648 \\
+1.50 & 0.005 & 0.002 & 0.125 & 0.648 \\
+2.00 & 0.003 & 0.001 & 0.102 & 0.648 \\
+\bottomrule
+\end{tabular}
+\end{table}

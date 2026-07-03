@@ -1,0 +1,19 @@
+\begin{table}[H]\centering\small
+\setlength{\tabcolsep}{5pt}
+\caption{Calo delle metriche tra dati puliti e caso peggiore (40\%), per tipo di rumore e modello. Il calo di F1 macro è quasi sempre maggiore del calo di accuratezza: il danno si concentra sulla classe minoritaria.}\label{tab:delta}
+\begin{tabular}{l cc cc cc}
+\toprule
+ & \multicolumn{2}{c}{NN Base} & \multicolumn{2}{c}{NN Pro} & \multicolumn{2}{c}{Random Forest}\\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+\textbf{Rumore} & $\Delta$Acc & $\Delta$F1$_m$ & $\Delta$Acc & $\Delta$F1$_m$ & $\Delta$Acc & $\Delta$F1$_m$ \\
+\midrule
+Feature noise            & $-0.035$ & $-0.054$ & $-0.018$ & $-0.024$ & $-0.047$ & $-0.066$ \\
+Feature noise localizzato & $-0.023$ & $-0.032$ & $-0.022$ & $-0.026$ & $-0.040$ & $-0.053$ \\
+Label noise random       & $-0.126$ & $-0.162$ & $-0.056$ & $-0.061$ & $-0.161$ & $-0.165$ \\
+Label noise borderline   & $-0.268$ & $-0.262$ & $-0.225$ & $-0.227$ & $-0.269$ & $-0.262$ \\
+Missing values           & $-0.035$ & $-0.045$ & $-0.038$ & $-0.039$ & $-0.026$ & $-0.030$ \\
+Outlier                  & $-0.006$ & $-0.008$ & $-0.006$ & $-0.007$ & $-0.005$ & $-0.006$ \\
+Missing feature          & $-0.138$ & $-0.182$ & $-0.161$ & $-0.180$ & $-0.142$ & $-0.181$ \\
+\bottomrule
+\end{tabular}
+\end{table}

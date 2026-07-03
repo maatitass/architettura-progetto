@@ -1,0 +1,14 @@
+\begin{table}[H]\centering\small
+\caption{Missing values: accuratezza con imputazione per media e per mediana. Le due strategie danno risultati molto vicini e nessuna delle due prevale su tutti i modelli.}\label{tab:mvconfronto}
+\begin{tabular}{c cc cc cc}
+\toprule
+ & \multicolumn{2}{c}{NN Base} & \multicolumn{2}{c}{NN Pro} & \multicolumn{2}{c}{Random Forest}\\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+\textbf{Rumore} & media & mediana & media & mediana & media & mediana \\
+\midrule
+10\% & 0.8596 & 0.8617 & 0.8588 & 0.8570 & 0.8720 & 0.8720 \\
+25\% & 0.8417 & 0.8425 & 0.8467 & 0.8328 & 0.8609 & 0.8578 \\
+40\% & 0.8218 & 0.8328 & 0.8320 & 0.8226 & 0.8538 & 0.8528 \\
+\bottomrule
+\end{tabular}
+\end{table}

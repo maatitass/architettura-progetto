@@ -188,7 +188,7 @@
         \item \textbf{Ridondanza} $\Rightarrow$ il disturbo su una feature è in
               parte compensato dalle altre.
         \item \feat{fAlpha} quasi scorrelata: \textbf{informazione unica e non
-              vicariabile}.
+              sostituibile}.
       \end{itemize}
     \end{column}
   \end{columns}
@@ -233,7 +233,8 @@
       \end{tabular}
       \vspace{0.4cm}
       \begin{itemize}
-        \item Modelli quasi equivalenti, tutti sopra il $65\%$.
+        \item Modelli quasi equivalenti, tutti ben oltre la soglia banale
+              del $65\%$.
         \item \textbf{RF} il migliore su tutte le metriche.
         \item NN Pro cede accuratezza (class weight) ma ha \textbf{AUC più alta}
               della Base.
@@ -302,6 +303,15 @@
   \end{enumerate}
 \end{frame}
 
+\begin{frame}{L'effetto dei disturbi su una feature}
+  \centering
+  \includegraphics[width=0.95\textwidth]{metodo_falpha}\\
+  \vspace{0.15cm}
+  {\small \feat{fAlpha} standardizzata: dati puliti e tre disturbi al $40\%$.
+  Il rumore gaussiano allarga la distribuzione, gli outlier creano due picchi
+  agli estremi, l'imputazione concentra molti campioni su un unico valore.}
+\end{frame}
+
 % ============================================================
 \section{Risultati per tipo di rumore}
 % ============================================================
@@ -309,13 +319,13 @@
 % ---------- Feature noise ----------
 \begin{frame}{Feature noise -- analisi}
   \begin{itemize}
-    \item Degrado \textbf{morbido e progressivo}: al $40\%$ tutti i modelli
+    \item Degrado \textbf{graduale}: al $40\%$ tutti i modelli
           restano sopra l'$83\%$ (calo di $3$--$4$ punti).
-    \item Al $40\%$ vince la \textbf{NN Pro} ($0{,}8417$): L2 $+$ dropout fanno da
-          filtro contro le fluttuazioni stocastiche.
-    \item La NN Base, senza vincoli, asseconda il rumore $\Rightarrow$ peggiora
-          sui campioni ignoti.
-    \item Decadimento \textbf{asimmetrico}: la recall adroni della Base crolla
+    \item Al $40\%$ vince la \textbf{NN Pro} ($0{,}8417$): L2 $+$ dropout
+          impediscono di apprendere le fluttuazioni casuali.
+    \item La NN Base, senza vincoli, si adatta al rumore $\Rightarrow$ peggiora
+          sui campioni nuovi.
+    \item Degrado \textbf{asimmetrico}: la recall adroni della Base crolla
           $0{,}77 \to 0{,}59$, mentre i gamma salgono $0{,}92 \to 0{,}97$.
     \item Il class weight della Pro sostiene la recall adroni a $0{,}73$.
   \end{itemize}
@@ -340,7 +350,7 @@
   \includegraphics[height=2.55cm]{fn_nnbase_cm10}\hfill
   \includegraphics[height=2.55cm]{fn_nnbase_cm25}\hfill
   \includegraphics[height=2.55cm]{fn_nnbase_cm40}\\
-  {\scriptsize NN Base, matrici di confusione a $10/25/40\%$: gli adroni scivolano verso i gamma.}
+  {\scriptsize NN Base, matrici di confusione a $10/25/40\%$: gli adroni vengono classificati sempre più spesso come gamma.}
 \end{frame}
 
 % ---------- Feature noise localizzato ----------
@@ -358,8 +368,8 @@
           \end{itemize}
   \end{itemize}
   \vfill
-  \keypoint{Il rumore \textbf{degrada} l'informazione ma non la cancella: la rete
-  attinge ancora alla geometria originale dei dati.}
+  \keypoint{Il rumore \textbf{degrada} l'informazione ma non la cancella:
+  un'informazione rumorosa ma presente resta utilizzabile.}
 \end{frame}
 
 \begin{frame}{Feature noise localizzato -- evidenze grafiche}
@@ -383,16 +393,16 @@
 % ---------- Label noise random ----------
 \begin{frame}{Label noise random -- analisi}
   \begin{itemize}
-    \item Fino al $25\%$ le metriche reggono; al $40\%$ \textbf{cedimento
-          drammatico}.
+    \item Fino al $25\%$ le metriche reggono; al $40\%$ il \textbf{crollo è
+          netto}.
     \item Al $40\%$: NN Base $\to 0{,}7419$, RF $\to 0{,}7179$;
           la \textbf{NN Pro regge a $0{,}8044$}.
     \item Causa nelle learning curves: la Base \emph{memorizza} le etichette
           spurie (train $\approx 88\%$) mentre la validation pulita peggiora.
     \item L'\textbf{early stopping} della Pro ferma l'addestramento prima della
-          memorizzazione di massa $\Rightarrow$ validation $\approx 82\%$.
-    \item Il RF assimila i falsi target nei nodi: errore distribuito su entrambe
-          le classi.
+          memorizzazione del rumore $\Rightarrow$ validation $\approx 82\%$.
+    \item Il RF memorizza le etichette errate nei nodi: errore distribuito su
+          entrambe le classi.
   \end{itemize}
   \vfill
   \keypoint{Qui la regolarizzazione fa la differenza: monitorare i dati puliti
@@ -431,10 +441,12 @@
     \item Sotto la soglia del classificatore banale ($\sim 65\%$): i modelli
           diventano \textbf{attivamente fuorvianti}.
     \item Invertire i campioni vicini al confine \textbf{sposta il confine
-          decisionale} stesso $\Rightarrow$ letalità geometrica.
+          decisionale} appreso: è un errore sistematico, non varianza.
     \item Le learning curves della NN Pro non mostrano alcun vantaggio:
           regolarizzazione ed early stopping \textbf{non recuperano}.
     \item Danno \textbf{simmetrico} tra le classi: il ribilanciamento è vanificato.
+    \item Log loss sul test al $40\%$: Base $1{,}06$, Pro $0{,}61$ $\Rightarrow$
+          l'early stopping contiene almeno il danno sulla \textbf{calibrazione}.
   \end{itemize}
   \vfill
   \keypoint{A parità di flip, falsificare le istanze ambigue è molto più dannoso
@@ -511,8 +523,8 @@
           \textbf{inefficace} (i percentili stessi sono saturati).
   \end{itemize}
   \vfill
-  \keypoint{La robustezza nasce dall'\textbf{innocuità del disturbo} più che dalla
-  mitigazione; teniamo la winsorizzazione per prudenza.}
+  \keypoint{La robustezza nasce dalla \textbf{natura poco dannosa del disturbo}
+  più che dalla mitigazione; teniamo la winsorizzazione per prudenza.}
 \end{frame}
 
 \begin{frame}{Outlier -- evidenze grafiche}
@@ -538,8 +550,8 @@
   \begin{itemize}
     \item Intere colonne azzerate su \emph{tutti} i set, per importanza:
           top-1 (\feat{fAlpha}) $\to$ top-3 $\to$ top-5.
-    \item Esito \textbf{catastrofico}: già al $10\%$ caduta di $4$--$5$ punti; al
-          $40\%$ tutti tra il $70\%$ e il $74\%$.
+    \item Esito \textbf{molto grave}: già al $10\%$ un calo di $4$--$5$ punti; al
+          $40\%$ tutti attorno al $70\%$.
     \item Qui non c'è rumore da filtrare ma \textbf{informazione che non esiste
           più}: azzerare \feat{fAlpha} pesa più del feature noise massimo.
     \item \textbf{Controtendenza}: la NN Pro è la \emph{meno} robusta
@@ -672,7 +684,7 @@
     \begin{column}{0.4\textwidth}
       \begin{itemize}
         \item Continue $=$ dati puliti; tratteggiate $=$ $40\%$ feature noise.
-        \item Lo scarto è limitato: il \textbf{potere di ranking} si erode poco.
+        \item Lo scarto è limitato: il \textbf{potere di ranking} si riduce poco.
         \item Conferma che il feature noise degrada soprattutto la decisione a
               soglia fissa, non l'ordinamento probabilistico.
       \end{itemize}
@@ -726,13 +738,13 @@
     \end{column}
     \begin{column}{0.5\textwidth}
       \centering\includegraphics[width=\linewidth]{kmeans_noise_pca}\\
-      {\scriptsize I cluster si liquefanno all'aumentare di $\sigma$.}
+      {\scriptsize I confini dei cluster diventano meno netti all'aumentare di $\sigma$.}
     \end{column}
   \end{columns}
   \vspace{0.1cm}
-  \keypoint{Il \textbf{feature noise} sfuma i cluster (silhouette
-  $0{,}290 \to 0{,}102$). Il \textbf{label noise} non li tocca (ARI $=1{,}000$):
-  K-Means non usa le etichette.}
+  \keypoint{Il \textbf{feature noise} degrada i cluster (silhouette
+  $0{,}290 \to 0{,}102$). Il \textbf{label noise} non ha alcun effetto
+  (ARI $=1{,}000$): K-Means non usa le etichette.}
 \end{frame}
 
 \begin{frame}{K-Means: la lezione trasversale}
@@ -790,6 +802,21 @@
   \vfill
   \keypoint{La robustezza si costruisce a monte (cura del dato) tanto quanto a
   valle (scelta dell'algoritmo).}
+\end{frame}
+
+\begin{frame}{Limiti e sviluppi futuri}
+  \begin{itemize}
+    \item Il controllo multi-seed copre solo il feature noise: va esteso agli
+          altri disturbi, in particolare al label noise.
+    \item Soglia di decisione fissa a $0{,}5$: ritararla sul validation set
+          potrebbe recuperare parte della recall sugli adroni.
+    \item Iperparametri scelti sui dati puliti e mai ricalibrati sotto rumore.
+    \item Alberi del Random Forest senza limite di profondità: limitarla
+          dovrebbe ridurre la memorizzazione delle etichette invertite.
+    \item Un solo dataset: la gerarchia osservata dipende anche dalla ridondanza
+          tra le feature e dal ruolo di \feat{fAlpha}; va confermata su dataset
+          con struttura diversa.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}[plain]
