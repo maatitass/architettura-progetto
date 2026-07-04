@@ -348,9 +348,6 @@
   \centering
   \includegraphics[height=3.3cm]{fn_nnbase_curve40}\hfill
   \includegraphics[height=3.3cm]{fn_nnpro_curve40}\\
-  {\scriptsize Curve al $40\%$: NN Base (sinistra) vs NN Pro (destra).
-  La Pro mantiene train e validation più vicine: L2 e dropout limitano
-  l'adattamento al rumore.}
 \end{frame}
 
 \begin{frame}{Feature noise: evidenze grafiche}
@@ -367,20 +364,14 @@
 % ---------- Feature noise localizzato ----------
 \begin{frame}{Feature noise localizzato -- analisi}
   \begin{itemize}
-    \item Intensità fissa ($\sigma=0{,}35$), ma colpisce solo le feature più
+    \item Intensità fissa con $\sigma=0{,}35$, ma colpisce solo le feature più
           importanti: top-1 (\feat{fAlpha}) $\to$ top-3 $\to$ top-5.
-    \item Degrado comunque \textbf{lieve}: al $40\%$ tutti sopra l'$83\%$.
-    \item Stessa asimmetria: recall adroni Base a $0{,}67$, Pro a $0{,}75$.
-    \item \textbf{Contrasto chiave con il missing feature:}
-          \begin{itemize}
-            \item[$\circ$] \emph{disturbare} \feat{fAlpha} $\Rightarrow$ NN Base a
-                  $0{,}8651$;
-            \item[$\circ$] \emph{azzerarla} $\Rightarrow$ crollo a $0{,}8215$.
-          \end{itemize}
+    \item Degrado comunque lieve: al $40\%$ tutti sopra l'$83\%$.
+    \item Rimane assimetria: recall degli adroni nelle rete Base a $0{,}67$, in quella Pro a $0{,}75$.
   \end{itemize}
   \vfill
-  \keypoint{Il rumore \textbf{degrada} l'informazione ma non la cancella:
-  un'informazione rumorosa ma presente resta utilizzabile.}
+  Il rumore degrada l'informazione ma non la cancella:
+  un'informazione rumorosa ma presente resta utilizzabile.
 \end{frame}
 
 \begin{frame}{Feature noise localizzato: metriche e matrici di confusione}
