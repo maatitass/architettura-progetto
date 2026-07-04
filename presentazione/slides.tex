@@ -362,16 +362,20 @@
 \end{frame}
 
 % ---------- Feature noise localizzato ----------
-\begin{frame}{Feature noise localizzato -- analisi}
+\begin{frame}{Feature noise localizzato: analisi}
   \begin{itemize}
-    \item Intensità fissa con $\sigma=0{,}35$, ma colpisce solo le feature più
-          importanti: top-1 (\feat{fAlpha}) $\to$ top-3 $\to$ top-5.
-    \item Degrado comunque lieve: al $40\%$ tutti sopra l'$83\%$.
-    \item Rimane assimetria: recall degli adroni nelle rete Base a $0{,}67$, in quella Pro a $0{,}75$.
+    \item Stesso $\sigma=0{,}35$ del rumore diffuso, ma concentrato solo sulle
+          feature più informative: top-1 (\feat{fAlpha}) $\to$ top-3 $\to$ top-5.
+    \item Degrado \textbf{ancora più lieve}: al $40\%$ vince la \textbf{NN Base}
+          ($0{,}8452$), sopra tutti i risultati del rumore diffuso.
+    \item La ridondanza tra feature (vista in EDA) assorbe il colpo:
+          poche feature corrotte non bastano a confondere il modello.
+    \item Resta \textbf{asimmetria}, ma attenuata: recall adroni $0{,}67$ in NN
+          Base, $0{,}75$ in NN Pro (contro $0{,}59$ e $0{,}73$ del rumore diffuso).
   \end{itemize}
   \vfill
-  Il rumore degrada l'informazione ma non la cancella:
-  un'informazione rumorosa ma presente resta utilizzabile.
+  Colpire le feature più importanti non è peggio che colpirle tutte:
+  l'informazione persa è compensata da quella ridondante rimasta pulita.
 \end{frame}
 
 \begin{frame}{Feature noise localizzato: metriche e matrici di confusione}
@@ -402,7 +406,7 @@
   {\scriptsize Curve al $40\%$: NN Base (sinistra) vs NN Pro (destra).}
 \end{frame}
 
-\begin{frame}{Feature noise localizzato -- evidenze grafiche}
+\begin{frame}{Feature noise localizzato: evidenze grafiche}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
       \centering\includegraphics[height=3.0cm]{fnloc_compare_acc}\\
