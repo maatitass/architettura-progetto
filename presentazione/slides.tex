@@ -62,8 +62,8 @@
     \begin{column}{0.5\textwidth}
       \textbf{Cosa facciamo}
       \begin{itemize}
-        \item Calcoliamo una \emph{baseline} sui dati integri.
-        \item Corrompiamo il \textbf{solo training set} con sette tipi di rumore.
+        \item Calcoliamo una baseline sui dati integri.
+        \item Corrompiamo il solo training set con sette tipi di rumore.
         \item Tre livelli di intensità crescente: $10\%$, $25\%$, $40\%$.
         \item Riaddestriamo i modelli ad ogni livello.
       \end{itemize}
@@ -71,7 +71,7 @@
     \begin{column}{0.5\textwidth}
       \textbf{Come valutiamo}
       \begin{itemize}
-        \item Metriche sempre su un \textbf{test set pulito} e inalterato.
+        \item Metriche sempre su un test set pulito e inalterato.
         \item Quattro metriche: accuratezza, F1 macro, recall macro, AUC.
         \item Tre modelli con difese crescenti contro il rumore.
         \item Un esperimento non supervisionato.
@@ -90,9 +90,9 @@
     \begin{column}{0.56\textwidth}
       \begin{itemize}
         \item Simulazioni Monte Carlo del telescopio Cherenkov MAGIC.
-        \item Ogni record è una  traccia luminosa di un evento atmosferico.
+        \item Ogni record è una traccia luminosa di un evento atmosferico.
         \item Classificazione binaria: 
-              \textbf{gamma (1)} vs \textbf{adroni (0)}.
+              gamma (1) vs adroni (0).
         \item $19\,020$ osservazioni, $10$ feature continue $+$ target.
       \end{itemize}
     \end{column}
@@ -123,15 +123,15 @@
     \feat{fDist}    & distanza dal centro del campo all'origine dell'ellisse \\
     \bottomrule
   \end{tabular}
-  \keypoint{Le feature codificano \textbf{geometria} e \textbf{distribuzione di
-  intensità} dell'immagine.}
+  \keypoint{Le feature codificano geometria e distribuzione di
+  intensità dell'immagine.}
 \end{frame}
 
 \begin{frame}{Suddivisione dei dati}
-  \textbf{Split stratificato $60/20/20$}
+  \textbf{Split stratificato 60/20/20}
     \begin{itemize}
         \item $11\,412$ train, $3\,804$ val, $3\,804$ test.
-        \item Split \emph{prima} di ogni analisi: niente \textbf{data leakage}.
+        \item Split prima di ogni analisi: niente data leakage.
         \item Stratificazione sul target: ogni partizione conserva il rapporto
               gamma/adroni.
       \end{itemize}
@@ -142,7 +142,7 @@
 \begin{frame}{EDA: Distribuzioni delle feature}
   \centering
   \includegraphics[height=0.70\textheight]{eda_hist}\\
-  {\small Distribuzioni \textbf{asimmetriche}, code lunghe e
+  {\small Distribuzioni asimmetriche, code lunghe e
   scale eterogenee da unità a centinaia.}
 \end{frame}
 
@@ -177,7 +177,7 @@
   \textbf{Standardizzazione}
     \begin{itemize}
       \item Normalizzazione del dataset: media $0$, deviazione standard $1$.
-      \item Parametri stimati \textbf{solo sul training}, applicati a val/test: no data leakage.
+      \item Parametri stimati solo sul training, applicati a val/test: no data leakage.
       \item Essenziale per la convergenza delle reti neurali.
     \end{itemize}
   \end{frame}
@@ -192,10 +192,10 @@
           Libero di andare in overfitting.
     \item \textbf{NN Pro} -- stessa architettura $+$ quattro difese:
           \begin{itemize}
-            \item[$\circ$] regolarizzazione \emph{L2} ($10^{-4}$);
-            \item[$\circ$] \emph{dropout} ($0{,}2$);
-            \item[$\circ$] \emph{class weight} bilanciato a favore degli adroni;
-            \item[$\circ$] \emph{early stopping} sulla validation loss con patience $15$.
+            \item[$\circ$] regolarizzazione L2 ($10^{-4}$);
+            \item[$\circ$] dropout ($0{,}2$);
+            \item[$\circ$] class weight bilanciato a favore degli adroni;
+            \item[$\circ$] early stopping sulla validation loss con patience $15$.
           \end{itemize}
     \item \textbf{Random Forest} -- $200$ alberi, bagging e voto di
           maggioranza: la varianza degli errori individuali si cancella.
@@ -225,14 +225,14 @@
       \begin{itemize}
         \item Modelli quasi equivalenti, tutti ben oltre la soglia banale
               del $65\%$.
-        \item \textbf{RF} il migliore su tutte le metriche.
-        \item NN Pro cede accuratezza (class weight) ma ha \textbf{AUC più alta}
+        \item RF il migliore su tutte le metriche.
+        \item NN Pro cede accuratezza (class weight) ma ha AUC più alta
               della rete Base.
       \end{itemize}
     \end{column}
     \begin{column}{0.44\textwidth}
       \centering\includegraphics[width=\linewidth]{baseline_featimp}\\
-      {\small \feat{fAlpha} domina la \emph{feature importance} ($\approx 0{,}24$),
+      {\small \feat{fAlpha} domina la feature importance ($\approx 0{,}24$),
       coerente con i boxplot.}
     \end{column}
   \end{columns}
@@ -248,7 +248,7 @@
   \begin{minipage}{0.9\linewidth}
     \centering
     Tutti riconoscono bene i gamma; gli errori si concentrano sugli
-    \textbf{adroni}.
+    adroni.
   \end{minipage}
 \end{frame}
 
@@ -264,11 +264,11 @@
 % ============================================================
 \begin{frame}{Come iniettiamo il rumore}
   \begin{itemize}
-    \item Il rumore altera \textbf{solo il training set}; validation e test
+    \item Il rumore altera solo il training set; validation e test
           restano puliti $\Rightarrow$ valutiamo la vera generalizzazione.
     \item Per ogni rumore: riaddestramento ai tre livelli ($10\%$, $25\%$, $40\%$)
           e valutazione sullo stesso test set.
-    \item Iniezione sul training \emph{già standardizzato}: per perturbazioni
+    \item Iniezione sul training già standardizzato: per perturbazioni
           additive o monotone equivale a corrompere i dati originali.
   \end{itemize}
   \vfill
@@ -307,15 +307,15 @@
 % ============================================================
 
 % ---------- Feature noise ----------
-\begin{frame}{Feature noise: analisi}
+\begin{frame}{Feature noise}
   \begin{itemize}
-    \item Degrado \textbf{graduale}: al $40\%$ tutti i modelli
+    \item Degrado graduale: al $40\%$ tutti i modelli
           restano sopra l'$83\%$ (calo di $3$--$4$ punti).
-    \item Al $40\%$ vince la \textbf{NN Pro} ($0{,}8417$): L2 $+$ dropout
+    \item Al $40\%$ vince la NN Pro ($0{,}8417$): L2 $+$ dropout
           impediscono di apprendere le fluttuazioni casuali.
     \item La NN Base, senza vincoli, si adatta al rumore e peggiora
           sui campioni nuovi.
-    \item Degrado \textbf{asimmetrico}: la recall adroni della Base crolla
+    \item Degrado asimmetrico: la recall adroni della Base crolla
           $0{,}77 \to 0{,}59$, mentre quella dei gamma sale $0{,}92 \to 0{,}97$.
     \item Il class weight della Pro sostiene la recall degli adroni a $0{,}73$.
   \end{itemize}
@@ -362,7 +362,7 @@
 \end{frame}
 
 % ---------- Feature noise localizzato ----------
-\begin{frame}{Feature noise localizzato: analisi}
+\begin{frame}{Feature noise localizzato}
   \begin{itemize}
     \item Stesso $\sigma=0{,}35$ del rumore diffuso, ma concentrato solo sulle
           feature più informative: top-1 (\feat{fAlpha}) $\to$ top-3 $\to$ top-5.
@@ -406,36 +406,35 @@
   {\scriptsize Curve al $40\%$: NN Base (sinistra) vs NN Pro (destra).}
 \end{frame}
 
-\begin{frame}{Feature noise localizzato: evidenze grafiche}
+\begin{frame}{Feature noise localizzato: confronto tra modelli}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
-      \centering\includegraphics[height=3.0cm]{fnloc_compare_acc}\\
+      \centering\includegraphics[height=4.0cm]{fnloc_compare_acc}\\
       {\scriptsize Accuratezza: curve vicine e quasi piatte.}
     \end{column}
     \begin{column}{0.5\textwidth}
-      \centering\includegraphics[height=3.0cm]{fnloc_compare_f1}\\
+      \centering\includegraphics[height=4.0cm]{fnloc_compare_f1}\\
       {\scriptsize F1 macro: stesso andamento del rumore diffuso.}
     \end{column}
   \end{columns}
 \end{frame}
 
 % ---------- Label noise random ----------
-\begin{frame}{Label noise random -- analisi}
+\begin{frame}{Label noise random}
   \begin{itemize}
-    \item Fino al $25\%$ le metriche reggono; al $40\%$ il \textbf{crollo è
-          netto}.
+    \item Fino al $25\%$ le metriche reggono; al $40\%$ il peggioramento è marcato.
     \item Al $40\%$: NN Base $\to 0{,}7419$, RF $\to 0{,}7179$;
-          la \textbf{NN Pro regge a $0{,}8044$}.
-    \item Causa nelle learning curves: la Base \emph{memorizza} le etichette
-          spurie (train $\approx 88\%$) mentre la validation pulita peggiora.
-    \item L'\textbf{early stopping} della Pro ferma l'addestramento prima della
-          memorizzazione del rumore $\Rightarrow$ validation $\approx 82\%$.
+          la NN Pro a $0{,}8044$.
+    \item La causa si vede nelle learning curves: la rete Base memorizza le etichette
+          errate (train all' $88\%$) mentre la validation pulita peggiora.
+    \item L'early stopping della Pro ferma l'addestramento prima della
+          memorizzazione del rumore: validation all' $82\%$.
     \item Il RF memorizza le etichette errate nei nodi: errore distribuito su
           entrambe le classi.
   \end{itemize}
   \vfill
-  \keypoint{Qui la regolarizzazione fa la differenza: monitorare i dati puliti
-  protegge dal rumore sulle etichette.}
+  Qui la regolarizzazione fa la differenza: monitorare i dati puliti
+  protegge dal rumore sulle etichette.
 \end{frame}
 
 \begin{frame}{Label noise random: metriche e matrici di confusione}
@@ -464,12 +463,9 @@
   \centering
   \includegraphics[height=3.3cm]{lnr_nnbase_curve40}\hfill
   \includegraphics[height=3.3cm]{lnr_nnpro_curve40}\\
-  {\scriptsize Curve al $40\%$: NN Base (sinistra) memorizza le etichette spurie
-  (train sale, validation scende); NN Pro (destra) ferma l'addestramento con
-  l'early stopping prima della memorizzazione.}
 \end{frame}
 
-\begin{frame}{Label noise random -- evidenze grafiche}
+\begin{frame}{Label noise random: confronto tra modelli}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
       \centering\includegraphics[height=4.0cm]{lnr_compare_acc}\\
@@ -481,23 +477,21 @@
 \end{frame}
 
 % ---------- Label noise borderline ----------
-\begin{frame}{Label noise borderline -- analisi}
+\begin{frame}{Label noise borderline}
   \begin{itemize}
-    \item Il disturbo \textbf{più distruttivo}: cala già al $25\%$, al $40\%$
-          tutti scendono attorno al \textbf{$60\%$}.
+    \item Il disturbo più distruttivo: cala già al $25\%$, al $40\%$
+          tutti scendono attorno al $60\%$.
     \item Sotto la soglia del classificatore banale ($\sim 65\%$): i modelli
-          diventano \textbf{attivamente fuorvianti}.
-    \item Invertire i campioni vicini al confine \textbf{sposta il confine
-          decisionale} appreso: è un errore sistematico, non varianza.
+          diventano completamente errati.
+    \item Invertire i campioni vicini al confine sposta il confine
+          decisionale appreso.
     \item Le learning curves della NN Pro non mostrano alcun vantaggio:
-          regolarizzazione ed early stopping \textbf{non recuperano}.
-    \item Danno \textbf{simmetrico} tra le classi: il ribilanciamento è vanificato.
-    \item Log loss sul test al $40\%$: Base $1{,}06$, Pro $0{,}61$ $\Rightarrow$
-          l'early stopping contiene almeno il danno sulla \textbf{calibrazione}.
+          regolarizzazione ed early stopping non recuperano.
+    \item Danno simmetrico tra le classi.
   \end{itemize}
   \vfill
-  \keypoint{A parità di flip, falsificare le istanze ambigue è molto più dannoso
-  del rumore casuale: corrompe la struttura, non solo i dati.}
+  A parità di inversioni, falsificare le istanze ambigue è molto più dannoso
+  del rumore casuale: corrompe la struttura, non solo i dati.
 \end{frame}
 
 \begin{frame}{Label noise borderline: metriche e matrici di confusione}
@@ -525,12 +519,10 @@
 \begin{frame}{Label noise borderline: curve di addestramento}
   \centering
   \includegraphics[height=3.3cm]{lnb_nnbase_curve40}\hfill
-  \includegraphics[height=3.3cm]{lnb_nnpro_curve40}\\
-  {\scriptsize Curve al $40\%$: NN Base (sinistra) e NN Pro (destra) -- crolla anche
-  la validation, l'early stopping non offre alcun vantaggio.}
+  \includegraphics[height=3.3cm]{lnb_nnpro_curve40}
 \end{frame}
 
-\begin{frame}{Label noise borderline -- evidenze grafiche}
+\begin{frame}{Label noise borderline: grafici e confronto tra modelli}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
       \centering\includegraphics[height=4.0cm]{lnb_compare_acc}\\
@@ -543,13 +535,12 @@
 \end{frame}
 
 % ---------- Missing values ----------
-\begin{frame}{Missing values -- analisi}
+\begin{frame}{Missing values}
   \begin{itemize}
-    \item Celle sostituite con \texttt{NaN}; i modelli non leggono dati incompleti
-          $\Rightarrow$ serve \textbf{imputazione}.
-    \item Con la mediana (variante canonica) le metriche restano $82$--$85\%$:
-          degrado \textbf{lineare e gestibile}.
-    \item Il \textbf{Random Forest} è il più resistente ($0{,}8528$ al $40\%$):
+    \item Celle sostituite con \texttt{NaN}; i modelli non leggono dati incompleti quindi serve imputazione.
+    \item Con la mediana le metriche restano $82$--$85\%$:
+          degrado lineare e gestibile.
+    \item Il Random Forest è il più resistente ($0{,}8528$ al $40\%$):
           opera per divisioni, isola meglio le celle imputate.
     \item \textbf{Media vs mediana}: divario marginale e senza direzione univoca.
           \begin{itemize}
@@ -558,8 +549,8 @@
           \end{itemize}
   \end{itemize}
   \vfill
-  \keypoint{La mediana resta riferimento per robustezza teorica alle code, ma sul
-  piano empirico la scelta incide poco.}
+  La mediana resta riferimento per robustezza teorica alle code, ma sul
+  piano empirico la scelta incide poco.
 \end{frame}
 
 \begin{frame}{Missing values: metriche e matrici di confusione}
@@ -590,7 +581,7 @@
   overfitting marcato.}
 \end{frame}
 
-\begin{frame}{Missing values -- evidenze grafiche}
+\begin{frame}{Missing values: grafici e confronto tra modelli}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
       \centering\includegraphics[height=4.0cm]{mv_compare_acc}\\
@@ -603,21 +594,21 @@
 \end{frame}
 
 % ---------- Outlier ----------
-\begin{frame}{Outlier -- analisi}
+\begin{frame}{Outlier}
   \begin{itemize}
-    \item Il disturbo \textbf{meno dannoso}: l'accuratezza resta $85$--$87\%$,
+    \item Il disturbo meno dannoso: l'accuratezza resta $85$--$87\%$,
           quasi nessuna tendenza al degrado.
-    \item Motivo \textbf{nella natura del disturbo}, non nel trattamento: i valori
-          $\pm 5\sigma$ hanno segno casuale e scorrelato dall'etichetta
-          $\Rightarrow$ il loro contributo al gradiente si media a zero.
-    \item Tre strategie quasi equivalenti: nessun trattamento, winsorizzazione,
+    \item Motivo nella natura del disturbo, non nel trattamento: i valori
+          $\pm 5\sigma$ hanno segno casuale e scorrelato dall'etichetta quindi 
+          il loro contributo al gradiente si media a zero.
+    \item Le metriche delle tre strategie quasi equivalenti: nessun trattamento, winsorizzazione,
           imputazione.
     \item Ad alta corruzione la winsorizzazione al $5\%$ è in gran parte
-          \textbf{inefficace} (i percentili stessi sono saturati).
+          inefficace.
   \end{itemize}
   \vfill
-  \keypoint{La robustezza nasce dalla \textbf{natura poco dannosa del disturbo}
-  più che dalla mitigazione; teniamo la winsorizzazione per prudenza.}
+  La robustezza nasce dalla natura poco dannosa del disturbo
+  più che dalla mitigazione; teniamo comunque la winsorizzazione come baseline.
 \end{frame}
 
 \begin{frame}{Outlier: metriche e matrici di confusione}
@@ -648,7 +639,7 @@
   visibile sull'addestramento.}
 \end{frame}
 
-\begin{frame}{Outlier -- evidenze grafiche}
+\begin{frame}{Outlier: grafici e confronto tra modelli}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
       \centering\includegraphics[height=4.0cm]{out_compare_acc}\\
@@ -661,21 +652,20 @@
 \end{frame}
 
 % ---------- Missing feature ----------
-\begin{frame}{Missing feature (sensore guasto) -- analisi}
+\begin{frame}{Missing feature}
   \begin{itemize}
-    \item Intere colonne azzerate su \emph{tutti} i set, per importanza:
-          top-1 (\feat{fAlpha}) $\to$ top-3 $\to$ top-5.
-    \item Esito \textbf{molto grave}: già al $10\%$ un calo di $4$--$5$ punti; al
+    \item Intere colonne azzerate su tutti i set, per importanza.
+    \item Esito molto grave: già al $10\%$ un calo di $4$--$5$ punti; al
           $40\%$ tutti attorno al $70\%$.
-    \item Qui non c'è rumore da filtrare ma \textbf{informazione che non esiste
-          più}: azzerare \feat{fAlpha} pesa più del feature noise massimo.
-    \item \textbf{Controtendenza}: la NN Pro è la \emph{meno} robusta
+    \item Qui non c'è rumore da filtrare ma informazione che non esiste
+          più: azzerare \feat{fAlpha} pesa più del feature noise massimo.
+    \item La NN Pro è la meno robusta
           ($0{,}6995$ al $40\%$): le difese contro l'overfitting irrigidiscono il
           modello quando manca informazione.
   \end{itemize}
   \vfill
-  \keypoint{\feat{fAlpha} è scorrelata dalle altre: la sua perdita è
-  \textbf{insostituibile} e colpisce soprattutto gli adroni.}
+  \feat{fAlpha} è scorrelata dalle altre: la sua perdita è
+  insostituibile e colpisce soprattutto gli adroni.
 \end{frame}
 
 \begin{frame}{Missing feature: metriche e matrici di confusione}
@@ -697,19 +687,17 @@
   \includegraphics[height=3.5cm]{mf_nnbase_cm40}\hfill
   \includegraphics[height=3.5cm]{mf_nnpro_cm40}\hfill
   \includegraphics[height=3.5cm]{mf_rf_cm40}\\
-  {\scriptsize Matrici di confusione al $40\%$ (top-5 feature rimosse): NN Base, NN Pro,
+  {\scriptsize Matrici di confusione al $40\%$: NN Base, NN Pro,
   Random Forest -- discriminazione adroni quasi azzerata.}
 \end{frame}
 
 \begin{frame}{Missing feature: curve di addestramento}
   \centering
   \includegraphics[height=3.3cm]{mf_nnbase_curve40}\hfill
-  \includegraphics[height=3.3cm]{mf_nnpro_curve40}\\
-  {\scriptsize Curve al $40\%$ (top-5 feature rimosse): NN Base (sinistra) e NN Pro
-  (destra) -- la Pro, più rigida, non compensa l'informazione mancante.}
+  \includegraphics[height=3.3cm]{mf_nnpro_curve40}
 \end{frame}
 
-\begin{frame}{Missing feature -- evidenze grafiche}
+\begin{frame}{Missing feature: grafici e confronto tra modelli}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
       \centering\includegraphics[height=4.0cm]{mf_compare_acc}\\
@@ -724,44 +712,32 @@
 % ============================================================
 \section{Controllo multi-seed}
 % ============================================================
-\begin{frame}{Controllo multi-seed: il trend è reale?}
+\begin{frame}{Controllo multi-seed}
+  \begin{itemize}
+    \item Feature noise ripetuto su cinque semi
+          $\{42, 7, 123, 2024, 99\}$.
+    \item Ogni seme governa rumore, split e inizializzazione.
+    \item Deviazione standard sempre $< 0{,}007$ (max $0{,}0068$).
+    \item Un ordine di grandezza sotto il calo dovuto al rumore
+          ($\sim 3{,}4$ punti per la NN Base).
+  \end{itemize}
+  \vfill
+  Le barre d'errore sono quasi impercettibili: il degrado è un
+  segnale reale, non varianza dal seed.
+\end{frame}
+
+\begin{frame}{Multi-seed: grafici e confronti}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
       \centering\includegraphics[width=\linewidth]{ms_acc}
     \end{column}
     \begin{column}{0.5\textwidth}
-      \begin{itemize}
-        \item Feature noise ripetuto su \textbf{cinque semi}
-              $\{42, 7, 123, 2024, 99\}$.
-        \item Ogni seme governa rumore, split e inizializzazione.
-        \item Deviazione standard sempre $< 0{,}007$ (max $0{,}0068$).
-        \item Un ordine di grandezza \textbf{sotto} il calo dovuto al rumore
-              ($\sim 3{,}4$ punti per la NN Base).
-      \end{itemize}
-    \end{column}
-  \end{columns}
-  \vfill
-  \keypoint{Le barre d'errore sono quasi impercettibili: il degrado è un
-  \textbf{segnale reale}, non varianza procedurale.}
-\end{frame}
-
-\begin{frame}{Multi-seed -- F1 macro e gerarchia confermata}
-  \begin{columns}[c]
-    \begin{column}{0.55\textwidth}
       \centering\includegraphics[width=\linewidth]{ms_f1}
     \end{column}
-    \begin{column}{0.45\textwidth}
-      \begin{itemize}
-        \item Stesso ordinamento sulla metrica bilanciata.
-        \item RF parte più in alto ($0{,}8800$) ma cede più rapidamente.
-        \item La NN Pro ha il degrado \textbf{più graduale}.
-        \item Le differenze sono coerenti tra i cinque semi.
-      \end{itemize}
-    \end{column}
   \end{columns}
   \vfill
-  \keypoint{L'ordinamento osservato non dipende dalle fluttuazioni del generatore
-  stocastico.}
+  L'ordinamento osservato non dipende dalle fluttuazioni del generatore
+  stocastico.
 \end{frame}
 
 % ============================================================
@@ -772,7 +748,7 @@
   \includegraphics[width=0.92\textwidth]{summary_heatmap}\\
   \vspace{0.2cm}
   {\small outlier $<$ feature noise $\approx$ missing values $<$ label noise random
-  $\approx$ missing feature $<$ \textbf{label noise borderline}.}
+  $\approx$ missing feature $<$ label noise borderline.}
 \end{frame}
 
 \begin{frame}{Degradazione e ranking complessivo}
@@ -790,12 +766,12 @@
         \item RF $0{,}780$
         \item NN Base $0{,}778$
       \end{itemize}
-      {\scriptsize Distanze trascurabili: \textbf{nessun vincitore netto}.}
+      {\scriptsize Distanze trascurabili: nessun vincitore netto.}
     \end{column}
   \end{columns}
 \end{frame}
 
-\begin{frame}{Chi vince su cosa}
+\begin{frame}{Classificazione dei modelli per scenario}
   \centering
   \footnotesize
   \begin{tabular}{lll}
@@ -807,23 +783,23 @@
     Label noise random & NN Pro        & early stopping blocca la memorizzazione \\
     Missing values     & Random Forest & opera per divisioni \\
     Outlier            & tutti (pari)  & disturbo quasi innocuo \\
-    Missing feature    & Random Forest & NN Pro la \emph{meno} robusta \\
+    Missing feature    & Random Forest & NN Pro la meno robusta \\
     Label borderline   & nessuno       & collasso generale ($\sim 60\%$) \\
     \bottomrule
   \end{tabular}
-  \keypoint{La scelta del modello dipende dal \textbf{tipo di errore atteso} nel
-  dominio applicativo, non da una superiorità astratta.}
+  La scelta del modello dipende dal tipo di errore atteso nel
+  dominio applicativo, non da una superiorità astratta.
 \end{frame}
 
-\begin{frame}{Curve ROC: il ranking resiste al feature noise}
+\begin{frame}{Curve ROC}
   \begin{columns}[c]
     \begin{column}{0.6\textwidth}
       \centering\includegraphics[width=\linewidth]{roc_clean_vs_fn40}
     \end{column}
     \begin{column}{0.4\textwidth}
       \begin{itemize}
-        \item Continue $=$ dati puliti; tratteggiate $=$ $40\%$ feature noise.
-        \item Lo scarto è limitato: il \textbf{potere di ranking} si riduce poco.
+        \item Continue: dati puliti; tratteggiate: $40\%$ feature noise.
+        \item Lo scarto è limitato: il potere di ranking si riduce poco.
         \item Conferma che il feature noise degrada soprattutto la decisione a
               soglia fissa, non l'ordinamento probabilistico.
       \end{itemize}
@@ -834,33 +810,32 @@
 % ============================================================
 \section{Analisi non supervisionata (K-Means)}
 % ============================================================
-\begin{frame}{K-Means: perché e come}
+\begin{frame}{K-Means: selezione del numero di cluster}
   \begin{columns}[c]
     \begin{column}{0.55\textwidth}
       \centering\includegraphics[width=\linewidth]{kmeans_kselection}
     \end{column}
     \begin{column}{0.45\textwidth}
       \begin{itemize}
-        \item Esperimento \textbf{senza etichette}: cosa trova un algoritmo basato
+        \item Esperimento non supervisionato: cosa trova un algoritmo basato
               solo sulla distanza?
-        \item $k=2$ scelto con \emph{elbow} (inerzia) e \emph{silhouette}
+        \item $k=2$ scelto con elbow e silhouette
               (massima in $k=2$).
-        \item La silhouette tende a premiare $k$ piccoli: indizio, non prova.
       \end{itemize}
     \end{column}
   \end{columns}
 \end{frame}
 
-\begin{frame}{K-Means: i cluster non sono le classi}
+\begin{frame}{K-Means}
   \begin{columns}[c]
     \begin{column}{0.6\textwidth}
       \centering\includegraphics[width=\linewidth]{kmeans_pca}
     \end{column}
     \begin{column}{0.4\textwidth}
       \begin{itemize}
-        \item \textbf{ARI $\approx 0{,}006$}, purezza $\approx 0{,}648$ (pari allo
+        \item ARI $\approx 0{,}006$, purezza $\approx 0{,}648$ (pari allo
               sbilanciamento nativo).
-        \item I cluster dividono lo spazio lungo la \textbf{varianza dominante},
+        \item I cluster dividono lo spazio lungo la varianza dominante,
               non la separazione fisica gamma/adrone.
         \item Le proprietà che distinguono le classi attraversano i cluster: nessun
               discriminante lineare.
@@ -869,7 +844,7 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{K-Means sotto rumore}
+\begin{frame}{K-Means: robustezza al feature noise}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
       \centering\includegraphics[width=\linewidth]{kmeans_noise}\\
@@ -881,66 +856,64 @@
     \end{column}
   \end{columns}
   \vspace{0.1cm}
-  \keypoint{Il \textbf{feature noise} degrada i cluster (silhouette
-  $0{,}290 \to 0{,}102$). Il \textbf{label noise} non ha alcun effetto
-  (ARI $=1{,}000$): K-Means non usa le etichette.}
+  Il feature noise degrada i cluster: silhouette
+  $0{,}290 \to 0{,}102$.
 \end{frame}
 
-\begin{frame}{K-Means: la lezione trasversale}
+\begin{frame}{K-Means: robustezza}
   \begin{itemize}
     \item La vulnerabilità a un rumore dipende strettamente dalle
-          \textbf{informazioni che il modello sfrutta}.
-    \item Il label noise -- devastante per i modelli supervisionati -- è
-          \textbf{del tutto ininfluente} per K-Means, che ignora le etichette.
-    \item Il feature noise -- gestibile nel supervisionato grazie alla ridondanza
-          -- \textbf{degrada} la struttura geometrica su cui K-Means si fonda.
+          informazioni che il modello sfrutta.
+    \item Il label noise (devastante per i modelli supervisionati) è
+          del tutto ininfluente per K-Means, che ignora le etichette.
+    \item Il feature noise, gestibile nel supervisionato grazie alla ridondanza,
+    degrada la struttura geometrica su cui K-Means si fonda.
   \end{itemize}
   \vfill
-  \keypoint{Ciò che è critico per un task può essere irrilevante per un altro:
-  la robustezza è sempre \textbf{relativa al modo in cui si usano i dati}.}
+  Ciò che è critico per un task può essere irrilevante per un altro:
+  la robustezza è sempre relativa al modo in cui si usano i dati.
 \end{frame}
 
 % ============================================================
 \section{Conclusioni}
 % ============================================================
-\begin{frame}{Conclusioni -- i rumori}
+\begin{frame}{Conclusioni: i rumori}
   \begin{itemize}
-    \item Esiste una chiara \textbf{gerarchia di pericolosità}:
+    \item Esiste una chiara gerarchia di pericolosità:
           \begin{itemize}
-            \item[$\circ$] \emph{trascurabili}: outlier;
-            \item[$\circ$] \emph{gestibili}: feature noise, missing values
+            \item[$\circ$] trascurabili: outlier;
+            \item[$\circ$] gestibili: feature noise, missing values
                   (ridondanza e imputazione);
-            \item[$\circ$] \emph{critici}: missing feature e label noise.
+            \item[$\circ$] critici: missing feature e label noise.
           \end{itemize}
-    \item Missing feature e label noise sono gravi per ragioni \textbf{opposte}:
+    \item Missing feature e label noise sono gravi per ragioni opposte:
           il primo cancella informazione insostituibile, il secondo forza a
           memorizzare pattern errati.
-    \item Il caso peggiore è il \textbf{label noise borderline}: falsifica
+    \item Il caso peggiore è il label noise borderline: falsifica
           direttamente il confine decisionale.
-    \item Il degrado è spesso \textbf{asimmetrico}: a peggiorare è la classe
+    \item Il degrado è spesso asimmetrico: a peggiorare è la classe
           minoritaria (adroni); il class weight della NN Pro la protegge.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Conclusioni -- i modelli e il preprocessing}
+\begin{frame}{Conclusioni: modelli e preprocessing}
   \begin{itemize}
-    \item \textbf{Nessun modello domina}: la NN Pro vince sul rumore delle
+    \item Nessun modello domina: la NN Pro vince sul rumore delle
           etichette, il Random Forest su valori mancanti e outlier, la NN Base è
-          la più esposta.
-    \item La scelta del modello richiede un'analisi \emph{a priori} sui tipi di
+          la più vunerabile.
+    \item La scelta del modello richiede un'analisi a priori sui tipi di
           errore attesi nel dominio reale.
-    \item L'evidenza più forte: conta \textbf{più il preprocessing} della
+    \item L'evidenza più forte: conta più il preprocessing della
           complessità algoritmica.
           \begin{itemize}
             \item[$\circ$] imputazione, winsorizzazione, early stopping recuperano
                   gran parte del degrado.
           \end{itemize}
-    \item Ma nessun modello recupera un'informazione \textbf{cancellata} o
-          \textbf{falsificata} nei punti più sensibili.
+    \item Ma nessun modello recupera un'informazione cancellata o
+          falsificata nei punti più sensibili.
   \end{itemize}
   \vfill
-  \keypoint{La robustezza si costruisce a monte (cura del dato) tanto quanto a
-  valle (scelta dell'algoritmo).}
+  La robustezza si costruisce tramite cura del dato tanto quanto dalla scelta dell'algoritmo.
 \end{frame}
 
 \begin{frame}{Limiti e sviluppi futuri}
