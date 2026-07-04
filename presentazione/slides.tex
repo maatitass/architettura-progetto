@@ -18,9 +18,9 @@
 \graphicspath{{../relazione/img/}}
 
 % ---------- Colore di accento ----------
-\definecolor{bicoccablue}{RGB}{0,70,127}
-\setbeamercolor{structure}{fg=bicoccablue}
-\setbeamercolor{frametitle}{fg=bicoccablue}
+\definecolor{whale}{RGB}{0,70,127}
+\setbeamercolor{structure}{fg=whale}
+\setbeamercolor{frametitle}{fg=whale}
 
 % ---------- Comandi di comodo ----------
 \newcommand{\feat}[1]{\texttt{#1}}
@@ -30,7 +30,6 @@
 \title[Robustezza al rumore]{Studio di robustezza dei modelli di machine learning al rumore nei dati}
 \subtitle{Un'analisi sperimentale sul dataset MAGIC Gamma Telescope}
 \author[Maccagnan, Bonoli, Chudory]{Daniele Maccagnan \and Matias Bonoli \and Ashley Chudory}
-\institute[Bicocca]{Universit\`a degli Studi di Milano-Bicocca \\ Progetto di Architetture Dati}
 \date{Anno accademico 2025/2026}
 
 \begin{document}
@@ -48,25 +47,22 @@
 % ============================================================
 \begin{frame}{Perché studiare la robustezza al rumore}
   \begin{itemize}
-    \item In ogni pipeline reale i dati \textbf{non sono perfetti}: misure
+    \item Nei sistemi reali i dati non sono mai perfetti: misure
           imprecise, errori di annotazione, valori mancanti, anomalie, sensori
           guasti.
-    \item La domanda non è \emph{quale modello sia più accurato sui dati puliti},
-          ma \textbf{quanto ciascuno resiste} quando i dati si degradano.
-    \item Obiettivo: capire \textbf{come} e \textbf{perché} le prestazioni
+    \item La domanda non è quale modello sia più accurato sui dati puliti,
+          ma quanto ciascuno resiste quando i dati si degradano.
+    \item Obiettivo: capire come e perché le prestazioni
           peggiorano in funzione del tipo di disturbo introdotto.
   \end{itemize}
-  \vfill
-  \keypoint{Non cerchiamo un vincitore assoluto, ma il profilo di robustezza di
-  ogni modello rispetto a ogni tipo di corruzione.}
 \end{frame}
 
-\begin{frame}{L'approccio sperimentale}
+\begin{frame}{Approccio sperimentale}
   \begin{columns}[t]
     \begin{column}{0.5\textwidth}
       \textbf{Cosa facciamo}
       \begin{itemize}
-        \item Calcoliamo una \emph{baseline} sui dati integri ($0\%$).
+        \item Calcoliamo una \emph{baseline} sui dati integri.
         \item Corrompiamo il \textbf{solo training set} con sette tipi di rumore.
         \item Tre livelli di intensità crescente: $10\%$, $25\%$, $40\%$.
         \item Riaddestriamo i modelli ad ogni livello.
@@ -78,13 +74,12 @@
         \item Metriche sempre su un \textbf{test set pulito} e inalterato.
         \item Quattro metriche: accuratezza, F1 macro, recall macro, AUC.
         \item Tre modelli con difese crescenti contro il rumore.
-        \item Un esperimento non supervisionato (K-Means) chiude lo studio.
+        \item Un esperimento non supervisionato.
       \end{itemize}
     \end{column}
   \end{columns}
   \vfill
-  \keypoint{Seme fissato (\texttt{seed = 42}) su tutte le componenti stocastiche
-  $\Rightarrow$ piena riproducibilità.}
+  Seme fissato (\texttt{seed = 42}) su tutte le componenti stocastiche per la riproducibilità.
 \end{frame}
 
 % ============================================================
@@ -95,12 +90,10 @@
     \begin{column}{0.56\textwidth}
       \begin{itemize}
         \item Simulazioni Monte Carlo del telescopio Cherenkov MAGIC.
-        \item Ogni record = traccia luminosa (ellittica) di un evento atmosferico.
-        \item Task: classificazione binaria con significato fisico
-              \textbf{gamma (segnale)} vs \textbf{adroni (fondo)}.
+        \item Ogni record è una  traccia luminosa di un evento atmosferico.
+        \item Classificazione binaria: 
+              \textbf{gamma (1)} vs \textbf{adroni (0)}.
         \item $19\,020$ osservazioni, $10$ feature continue $+$ target.
-        \item Mappatura classi: \feat{h}$\rightarrow 0$ (adroni),
-              \feat{g}$\rightarrow 1$ (gamma).
       \end{itemize}
     \end{column}
     \begin{column}{0.44\textwidth}
@@ -134,47 +127,33 @@
   intensità} dell'immagine.}
 \end{frame}
 
-\begin{frame}{Suddivisione dei dati e preprocessing}
-  \begin{columns}[t]
-    \begin{column}{0.5\textwidth}
-      \textbf{Split stratificato $60/20/20$}
-      \begin{itemize}
+\begin{frame}{Suddivisione dei dati}
+  \textbf{Split stratificato $60/20/20$}
+    \begin{itemize}
         \item $11\,412$ train, $3\,804$ val, $3\,804$ test.
         \item Split \emph{prima} di ogni analisi: niente \textbf{data leakage}.
         \item Stratificazione sul target: ogni partizione conserva il rapporto
               gamma/adroni.
       \end{itemize}
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \textbf{Standardizzazione}
-      \begin{itemize}
-        \item Media $0$, deviazione $1$.
-        \item Parametri stimati \textbf{solo sul training}, applicati a val/test.
-        \item Essenziale per la convergenza delle reti neurali.
-        \item Un livello di rumore significa la stessa cosa per ogni feature.
-      \end{itemize}
-    \end{column}
-  \end{columns}
   \vfill
-  \keypoint{EDA condotta solo sul training; rimosse $41$ righe duplicate ($0{,}4\%$)
-  ai soli fini descrittivi.}
+  EDA condotta solo sul training
 \end{frame}
 
-\begin{frame}{EDA -- Distribuzioni delle feature}
+\begin{frame}{EDA: Distribuzioni delle feature}
   \centering
   \includegraphics[height=0.70\textheight]{eda_hist}\\
-  {\small Distribuzioni \textbf{asimmetriche} (\emph{right-skewed}), code lunghe e
-  scale eterogenee (da unità a centinaia) $\Rightarrow$ serve normalizzazione.}
+  {\small Distribuzioni \textbf{asimmetriche}, code lunghe e
+  scale eterogenee da unità a centinaia.}
 \end{frame}
 
-\begin{frame}{EDA -- Potere discriminante (boxplot per classe)}
+\begin{frame}{EDA: boxplot per classe}
   \centering
   \includegraphics[height=0.70\textheight]{eda_box}\\
   {\small \feat{fAlpha} è la più discriminante; seguono \feat{fLength},
-  \feat{fWidth}, \feat{fSize}. I momenti trasversali separano poco le classi.}
+  \feat{fWidth}, \feat{fSize}. Le restanti feature separano meno le classi.}
 \end{frame}
 
-\begin{frame}{EDA -- Correlazioni tra le feature}
+\begin{frame}{EDA: Correlazioni}
   \begin{columns}[c]
     \begin{column}{0.58\textwidth}
       \centering\includegraphics[width=\linewidth]{eda_corr}
@@ -183,41 +162,52 @@
       \begin{itemize}
         \item \feat{fConc}/\feat{fConc1} quasi ridondanti ($0{,}98$).
         \item Anticorrelazione con \feat{fSize} ($-0{,}85$).
-        \item Terna \feat{fLength}/\feat{fWidth}/\feat{fSize} correlata
+        \item \feat{fLength}/\feat{fWidth}/\feat{fSize} correlate
               ($0{,}70$--$0{,}77$).
-        \item \textbf{Ridondanza} $\Rightarrow$ il disturbo su una feature è in
+        \item Vi è ridondanza di informazione: il disturbo su una feature è in
               parte compensato dalle altre.
-        \item \feat{fAlpha} quasi scorrelata: \textbf{informazione unica e non
-              sostituibile}.
+        \item \feat{fAlpha} quasi scorrelata: informazione unica e non
+              sostituibile.
       \end{itemize}
     \end{column}
   \end{columns}
 \end{frame}
 
+\begin{frame}{Preprocessing}
+  \textbf{Standardizzazione}
+    \begin{itemize}
+      \item Normalizzazione del dataset: media $0$, deviazione standard $1$.
+      \item Parametri stimati \textbf{solo sul training}, applicati a val/test: no data leakage.
+      \item Essenziale per la convergenza delle reti neurali.
+    \end{itemize}
+  \end{frame}
+
 % ============================================================
 \section{Modelli e baseline}
 % ============================================================
-\begin{frame}{I tre modelli: difese crescenti al rumore}
+\begin{frame}{I tre modelli}
   \begin{itemize}
-    \item \textbf{NN Base} -- MLP \emph{ingenuo}: Dense(32)$\to$Dense(16)$\to$
+    \item \textbf{NN Base} -- Rete neurale semplice: Dense(32)$\to$Dense(16)$\to$
           sigmoide. Nessuna regolarizzazione, Adam $10^{-3}$, $75$ epoche.
-          Libero di adattarsi anche ai pattern spuri (overfitting).
+          Libero di andare in overfitting.
     \item \textbf{NN Pro} -- stessa architettura $+$ quattro difese:
           \begin{itemize}
             \item[$\circ$] regolarizzazione \emph{L2} ($10^{-4}$);
             \item[$\circ$] \emph{dropout} ($0{,}2$);
-            \item[$\circ$] \emph{class weight} bilanciato (a favore degli adroni);
-            \item[$\circ$] \emph{early stopping} sulla validation loss (patience $15$).
+            \item[$\circ$] \emph{class weight} bilanciato a favore degli adroni;
+            \item[$\circ$] \emph{early stopping} sulla validation loss con patience $15$.
           \end{itemize}
-    \item \textbf{Random Forest} -- $200$ alberi, \emph{bagging} e voto di
+    \item \textbf{Random Forest} -- $200$ alberi, bagging e voto di
           maggioranza: la varianza degli errori individuali si cancella.
   \end{itemize}
   \vfill
-  \keypoint{Quattro metriche di valutazione (soglia $0{,}5$): accuratezza, F1
-  macro, recall macro, AUC. Le macro pesano ugualmente le due classi.}
+  Quattro metriche di valutazione principali: accuratezza, F1
+  macro, recall macro, AUC. Le macro pesano ugualmente le due classi.
 \end{frame}
+  
 
-\begin{frame}{Baseline su dati puliti -- metriche}
+
+\begin{frame}{Baseline su dati puliti}
   \begin{columns}[c]
     \begin{column}{0.52\textwidth}
       \centering
@@ -237,10 +227,10 @@
               del $65\%$.
         \item \textbf{RF} il migliore su tutte le metriche.
         \item NN Pro cede accuratezza (class weight) ma ha \textbf{AUC più alta}
-              della Base.
+              della rete Base.
       \end{itemize}
     \end{column}
-    \begin{column}{0.48\textwidth}
+    \begin{column}{0.44\textwidth}
       \centering\includegraphics[width=\linewidth]{baseline_featimp}\\
       {\small \feat{fAlpha} domina la \emph{feature importance} ($\approx 0{,}24$),
       coerente con i boxplot.}
@@ -248,7 +238,7 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Baseline -- matrici di confusione e curve}
+\begin{frame}{Baseline: matrici di confusione e curve}
   \begin{columns}[c]
     \begin{column}{0.62\textwidth}
       \centering
@@ -263,8 +253,8 @@
     \end{column}
   \end{columns}
   \vfill
-  \keypoint{Tutti riconoscono bene i gamma; gli errori si concentrano sugli
-  \textbf{adroni}. Gap train/validation contenuto: nessun overfitting marcato.}
+  Tutti riconoscono bene i gamma; gli errori si concentrano sugli
+  \textbf{adroni}. Gap train/validation contenuto: nessun overfitting marcato.
 \end{frame}
 
 % ============================================================
@@ -280,26 +270,24 @@
           additive o monotone equivale a corrompere i dati originali.
   \end{itemize}
   \vfill
-  \keypoint{Ogni corruzione è deliberata e quantificabile: il dataset di partenza
-  è integro (nessun valore nullo nativo).}
 \end{frame}
 
 \begin{frame}{I sette meccanismi di rumore}
   \footnotesize
   \begin{enumerate}
-    \item \textbf{Feature noise} -- rumore gaussiano $N(0,\sigma)$ aggiunto a tutte
-          le feature ($\sigma$ proporzionale al livello).
-    \item \textbf{Feature noise localizzato} -- $\sigma=0{,}35$ fisso, ma su un
-          numero crescente di feature \emph{importanti} (top-1 / top-3 / top-5).
-    \item \textbf{Label noise random} -- etichette invertite a caso.
-    \item \textbf{Label noise borderline} -- etichette invertite sui campioni
-          \emph{ambigui} (vicini al confine tra le classi).
-    \item \textbf{Missing values} -- celle mancanti (\texttt{NaN}) da imputare
-          (media vs mediana).
-    \item \textbf{Outlier} -- righe a $\pm 5$ deviazioni standard, segno casuale
+    \item \textbf{Feature noise}: rumore gaussiano $N(0,\sigma)$ aggiunto a tutte
+          le feature con $\sigma$ proporzionale al livello.
+    \item \textbf{Feature noise localizzato}: $\sigma=0{,}35$ fisso, ma su un
+          numero crescente di feature importanti (top-1 / top-3 / top-5).
+    \item \textbf{Label noise random}: etichette invertite a caso.
+    \item \textbf{Label noise borderline}: etichette invertite sui campioni
+         ambigui vicini al centroidi tra le classi.
+    \item \textbf{Missing values}: celle mancanti (\texttt{NaN}) da imputare
+          con media o mediana.
+    \item \textbf{Outlier}: righe a $\pm 5$ deviazioni standard, segno casuale
           (strategie: nessuna / winsorizzazione / imputazione).
-    \item \textbf{Missing feature} -- intere colonne azzerate (sensore guasto),
-          su \emph{tutti} i set, per importanza decrescente.
+    \item \textbf{Missing feature}: intere colonne azzerate,
+          su tutti i set, per importanza decrescente.
   \end{enumerate}
 \end{frame}
 
@@ -317,40 +305,30 @@
 % ============================================================
 
 % ---------- Feature noise ----------
-\begin{frame}{Feature noise -- analisi}
+\begin{frame}{Feature noise: analisi}
   \begin{itemize}
     \item Degrado \textbf{graduale}: al $40\%$ tutti i modelli
           restano sopra l'$83\%$ (calo di $3$--$4$ punti).
     \item Al $40\%$ vince la \textbf{NN Pro} ($0{,}8417$): L2 $+$ dropout
           impediscono di apprendere le fluttuazioni casuali.
-    \item La NN Base, senza vincoli, si adatta al rumore $\Rightarrow$ peggiora
+    \item La NN Base, senza vincoli, si adatta al rumore e peggiora
           sui campioni nuovi.
     \item Degrado \textbf{asimmetrico}: la recall adroni della Base crolla
-          $0{,}77 \to 0{,}59$, mentre i gamma salgono $0{,}92 \to 0{,}97$.
-    \item Il class weight della Pro sostiene la recall adroni a $0{,}73$.
+          $0{,}77 \to 0{,}59$, mentre quella dei gamma sale $0{,}92 \to 0{,}97$.
+    \item Il class weight della Pro sostiene la recall degli adroni a $0{,}73$.
   \end{itemize}
   \vfill
-  \keypoint{La \textbf{ridondanza} tra feature attenua l'impatto: l'informazione
-  corrotta è in parte dedotta dalle variabili correlate.}
 \end{frame}
 
-\begin{frame}{Feature noise -- evidenze grafiche}
+\begin{frame}{Feature noise: evidenze grafiche}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
-      \centering\includegraphics[height=3.0cm]{fn_compare_acc}\\
-      {\scriptsize Accuratezza: pendenza lieve e omogenea.}
+      \centering\includegraphics[height=4.0cm]{fn_compare_acc}\\
     \end{column}
     \begin{column}{0.5\textwidth}
-      \centering\includegraphics[height=3.0cm]{fn_nnpro_curve40}\\
-      {\scriptsize NN Pro al $40\%$: train e validation appaiate.}
+      \centering\includegraphics[height=4.0cm]{fn_compare_f1.png}\\
     \end{column}
   \end{columns}
-  \vspace{0.08cm}
-  \centering
-  \includegraphics[height=2.55cm]{fn_nnbase_cm10}\hfill
-  \includegraphics[height=2.55cm]{fn_nnbase_cm25}\hfill
-  \includegraphics[height=2.55cm]{fn_nnbase_cm40}\\
-  {\scriptsize NN Base, matrici di confusione a $10/25/40\%$: gli adroni vengono classificati sempre più spesso come gamma.}
 \end{frame}
 
 % ---------- Feature noise localizzato ----------

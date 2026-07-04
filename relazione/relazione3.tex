@@ -65,7 +65,6 @@
 		{\large Autori\par}
 		\vspace{0.3cm}
 		{\large
-			Daniele Maccagnan \quad--\quad matricola [matricola]\\[0.25cm]
 			Matias Bonoli \quad--\quad matricola [matricola]\\[0.25cm]
 			Ashley Chudory \quad--\quad matricola [matricola]\\
 		}
@@ -74,32 +73,6 @@
 	\vfill
 	{\large Anno accademico 2025/2026\par}
 \end{titlepage}
-
-% ============================================================
-% SOMMARIO
-% ============================================================
-\section*{Sommario}
-\thispagestyle{plain}
-
-Questa relazione misura la robustezza di tre modelli di classificazione al
-rumore nei dati di addestramento: una rete neurale senza regolarizzazione, una
-rete neurale regolarizzata e un Random Forest. Il dataset è MAGIC Gamma
-Telescope, un problema di classificazione binaria tra segnali gamma e fondo
-adronico. Sette tipi di corruzione vengono iniettati nel training set a tre
-livelli di intensità, mentre il test set resta pulito.
-
-I risultati mostrano una gerarchia di pericolosità netta. Gli outlier sono
-quasi innocui e il rumore gaussiano sulle feature causa un calo moderato,
-attenuato dalla ridondanza tra le variabili. I valori mancanti si gestiscono
-bene con l'imputazione. I danni maggiori arrivano dalla rimozione delle feature
-più informative e dall'inversione delle etichette. Il caso peggiore è il label
-noise borderline, che al $40\%$ porta tutti i modelli sotto la soglia del
-classificatore banale. Nessun modello prevale in tutti gli scenari: la
-regolarizzazione e l'early stopping proteggono dal label noise casuale, ma non
-aiutano quando l'informazione viene rimossa del tutto. Un esperimento non
-supervisionato con K-Means completa lo studio e mostra che la vulnerabilità a
-un disturbo dipende da quali informazioni il modello usa.
-\clearpage
 
 % ============================================================
 % INDICE
