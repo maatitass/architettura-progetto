@@ -1,4 +1,4 @@
-\documentclass[aspectratio=169,11pt]{beamer}
+ \documentclass[aspectratio=169,11pt]{beamer}
 
 % ---------- Tema semplice, scala di grigi ----------
 \usetheme{Boadilla}
@@ -28,7 +28,7 @@
 
 % ---------- Metadati ----------
 \title[Robustezza al rumore]{Studio di robustezza dei modelli di machine learning al rumore nei dati}
-\subtitle{Un'analisi sperimentale sul dataset MAGIC Gamma Telescope}
+\subtitle{Architettura Dati}
 \author[Maccagnan, Bonoli, Chudory]{Daniele Maccagnan \and Matias Bonoli \and Ashley Chudory}
 \date{Anno accademico 2025/2026}
 
@@ -268,8 +268,8 @@
           restano puliti $\Rightarrow$ valutiamo la vera generalizzazione.
     \item Per ogni rumore: riaddestramento ai tre livelli ($10\%$, $25\%$, $40\%$)
           e valutazione sullo stesso test set.
-    \item Iniezione sul training già standardizzato: per perturbazioni
-          additive o monotone equivale a corrompere i dati originali.
+    \item Iniezione sul training già standardizzato: permette di isolare ed evidenziare 
+    l'impatto delle perturbazioni sul modello
   \end{itemize}
   \vfill
 \end{frame}
